@@ -1,0 +1,84 @@
+<template>
+	<div style="background-color:#fffcf7;" class="container">
+		<headMenu />
+		<div
+			class="overflow-hidden p-3 float-left"
+			:class="(chechRole()) ? 'h-center col-lg-12 col-md-12 col-sm-12 col-xs-12 ' : 'col-lg-9 col-md-9 col-sm-12 col-xs-12 ' "
+		>
+			<back
+				:title="(this.$route.params.id == undefined) ? 'کاربر جدید' : 'ویرایش کاربر'"
+				showBtn="true"
+				v-if="!chechRole()"
+			/>
+			<part1
+				class="w-100 border-15 shadow bg-white text-center"
+				@setPage = "setPage"
+			/>
+		</div>
+		<leftMenuUser
+			class="col-lg-3 col-md-3 float-left"
+			select="2"
+			v-if="!chechRole()"
+		/>
+		<footerPage />
+	</div>
+</template>
+
+	<script>
+		import textInput from  "../../UI/input/textInput.vue";
+		import headMenu from  "../../menu/headMenu.vue";
+		import btn from  "../../UI/button/btn.vue";
+		import back from  "../../UI/back/back.vue";
+		import part1 from  "./part1.vue";
+		import part2 from  "../../USER/reserved_user_list/part2.vue";
+		import footerPage from  "../../USER/public/home/home_part9.vue";
+		import leftMenuUser from  "../../menu/leftMenuUser.vue";
+		export default {
+			name: 'signupUser',
+			data(){
+				return {
+					imgurl: this.$localStorage.get('imgurl'),
+					baseurl: this.$localStorage.get('baseurl'),
+					flds: {ok: false, data: []},
+					degrees: [],
+					category: [],
+					location: [],
+
+				}
+			},
+			components: {
+				btn,
+				part1,
+				part2,
+				back,
+				footerPage,
+				headMenu,
+				textInput,
+				leftMenuUser,
+			},
+			props: [],
+			computed :{
+			},
+			mounted(){
+				this.$swal.close();
+
+			},
+			methods:{
+				// *********************************************************************
+				chechRole(){
+					let user = this.$localStorage.get('user');
+					if(user == null){
+						return true;
+					}else if(user.username.role != 3){
+						return true;
+					}else{
+						return false;
+					}
+				},
+				// *********************************************************************
+			}
+		}
+	</script>
+<style>
+
+</style>

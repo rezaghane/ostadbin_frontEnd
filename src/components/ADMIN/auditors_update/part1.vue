@@ -1,0 +1,167 @@
+<template>
+	<div class="w-100 p-3 bg-white border-15 h-center">
+		<div style="width: 75%; max-width: 500px;">
+			<previewImage
+			:img="val.image"
+			@chengeFile="(e)=>{i = e; uploadTF()}"
+			/>
+			<textInput
+				label = "نام و نام خانوادگی"
+				@inputTxtFunc = "(e)=>{val.name = e}"
+				:val="val.name"
+				autofocus="true"
+			/>
+			<textInput
+				label = "عنوان"
+				@inputTxtFunc = "(e)=>{val.title = e}"
+				:val="val.title"
+			/>
+			<textareaInput
+				label = "درباره من"
+				@inputTxtFunc = "(e)=>{val.about_me = e}"
+				:value="val.about_me"
+			/>
+			<selectInput
+				@inputTxtFunc = "(e)=>{val.status = e}"
+				:value = "val.status"
+				label="وضعیت"
+				:flds="[{'id': '1','name': 'وضعیت فعال'},{'id': '0','name': 'وضعیت غیر فعال'}]"
+			/>
+			<btn
+				class="w-100 mt-3"
+				textClass="w-100"
+				text="ذخیره"
+				@clickMe="sav()"
+				:disable = "(val.name=='' || val.title=='' || val.about_me=='') ? '1' : '0'"
+				:disableText = "(val.name=='' || val.title=='' || val.about_me=='') ? 'اطلاعات را تکمیل نمایید' : '' "
+			/>
+		</div>
+	</div>
+</template>
+
+	<script>
+		import btn from  "../../UI/button/btn.vue";
+		import switchInput from  "../../UI/input/switchInput.vue";
+		import textInput from  "../../UI/input/textInput.vue";
+		import datepicker from  "../../UI/input/datepicker.vue";
+		import multiSelectInput from  "../../UI/input/multiSelectInput.vue";
+		import selectInput from  "../../UI/input/selectInput.vue";
+		import textareaInput from  "../../UI/input/textareaInput.vue";
+		import userImg from  "../../UI/userImg/userImg.vue";
+		import pageNavigation from  "../../UI/pageNavigation/pageNavigation.vue";
+		import previewImage from  "../../UI/uploadFile/previewImage.vue";
+		import { validateEmail, validatePhone } from  "../../assets/library/filter.js";
+		import { time2minutes, minutes2time, classTime, timeOptions, vlaTimeOptions } from  "../../assets/library/convertTime.js";
+		import { error, success, loading, success_sm } from  "../../assets/library/messege.js";
+
+		export default {
+			name: 'self_part1',
+			data(){
+				return {
+					imgurl: this.$localStorage.get('imgurl'),
+					baseurl: this.$localStorage.get('baseurl'),
+					time2minutes: time2minutes,
+					minutes2time: minutes2time,
+					classTime: classTime,
+					timeOptions: timeOptions,
+					vlaTimeOptions: vlaTimeOptions,
+					getVar: null,
+					error: error,
+					success: success,
+					success_sm: success_sm,
+					loading: loading,
+					i: null,
+
+					val:{
+						image: '',
+						name: '',
+						title: '',
+						about_me: '',
+						status: '1',
+					},
+				}
+			},
+			components: {
+				btn,
+				switchInput,
+				vlaTimeOptions,
+				classTime,
+				timeOptions,
+				time2minutes,
+				minutes2time,
+				datepicker,
+				textInput,
+				selectInput,
+				pageNavigation,
+				userImg,
+				previewImage,
+				textareaInput,
+				multiSelectInput,
+			},
+			props: {
+				flds: {
+					default: [],
+				},
+			},
+			mounted(){
+				(this.$route.params.id != undefined) ? this.loader() : '';
+			},
+			methods:{
+				//______________________________________________________________________
+				loader(THIS = this){
+					document.body.scrollTop = 0;
+					$.post(this.baseurl+"auditors/" + this.$route.params.id, {token: this.$localStorage.get("user")}, function(D){
+						if(D.status.code=="401"){
+							THIS.$localStorage.remove('user');
+							THIS.$router.push('/login');
+						}else{
+							THIS.val.name = D.data.name;
+							THIS.val.title = D.data.title;
+							THIS.val.about_me = D.data.about_me;
+							THIS.val.status = D.data.status;
+							THIS.val.image = D.data.image;
+						}
+					}, "json");
+				},
+				//______________________________________________________________________
+				uploadTF(THIS = this){
+					THIS.loading(THIS);
+					var formData = new FormData();
+					formData.append("file", this.i[0]);
+					formData.append("format", this.$localStorage.get('formatImage'));
+					formData.append("idImg", "m_[DATE]_[RANDOM]");
+					var xhttp = new XMLHttpRequest();
+					xhttp.open("POST", this.$localStorage.get('upldurl'), true);
+					xhttp.onreadystatechange = function() {
+						if (this.readyState == 4 && this.status == 200) {
+							this.getVar = JSON.parse(this.responseText);
+							if(this.getVar.response == 1){
+								var typI = this.getVar.file_extension;
+								
+								THIS.val.image = this.getVar.uploadFileName;
+								THIS.success_sm(THIS);
+							} else {
+								THIS.error(THIS, "فرمت فایل باید jpg باشد");
+							}
+						}
+					};
+					xhttp.send(formData);
+				},
+				//______________________________________________________________________
+				sav(THIS = this){
+					let mod = (this.$route.params.id != undefined) ? this.$route.params.id : 'create';
+					THIS.loading(THIS);
+					$.post(this.baseurl+'auditors/' + mod, {
+						role: this.$localStorage.get('user').username.role,
+						val: THIS.val, token: this.$localStorage.get("user")
+					}, function(D){
+						THIS.success(THIS);
+						THIS.$router.push('/auditors/list');
+					}, "json");
+				},
+			}
+		}
+	</script>
+<style>
+
+</style>

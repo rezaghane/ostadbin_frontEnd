@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="58" height="58" viewBox="0 0 58 58">
+  <g id="Avatar_Small" transform="translate(-1018 -837)">
+    <g id="what-is-teacher-burnout" transform="translate(1018 837)" fill="#e9f4f7" stroke="#e9f4f7" stroke-width="1">
+      <rect width="58" height="58" rx="17" stroke="none"/>
+      <rect x="0.5" y="0.5" width="57" height="57" rx="16.5" fill="none"/>
+    </g>
+    <g id="User" transform="translate(1029.688 847.357)">
+      <path id="Path_16407" data-name="Path 16407" d="M15.257,4.56a5.548,5.548,0,1,0,5.583,5.547A5.565,5.565,0,0,0,15.257,4.56ZM7.1,10.108a8.16,8.16,0,1,1,8.16,8.108A8.134,8.134,0,0,1,7.1,10.108Z" transform="translate(2.057)" fill="#76c4d6" fill-rule="evenodd"/>
+      <path id="Path_16408" data-name="Path 16408" d="M13.1,16.355a6.5,6.5,0,0,0-6.52,6.478.963.963,0,0,0,.071.4.179.179,0,0,0,.079.1c1,.541,3.809,1.563,10.588,1.563S26.9,23.868,27.9,23.327a.18.18,0,0,0,.079-.1.963.963,0,0,0,.071-.4,6.5,6.5,0,0,0-6.52-6.478ZM4,22.834a9.068,9.068,0,0,1,9.1-9.039h8.434a9.068,9.068,0,0,1,9.1,9.039,3.013,3.013,0,0,1-1.495,2.742C27.6,26.407,24.3,27.45,17.314,27.45S7.032,26.407,5.495,25.576A3.013,3.013,0,0,1,4,22.834Z" transform="translate(0 7.835)" fill="#76c4d6" fill-rule="evenodd"/>
+    </g>
+  </g>
+</svg>
